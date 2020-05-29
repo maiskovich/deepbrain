@@ -32,12 +32,12 @@ def run(img_path, output_dir, p=0.5):
     mask = prob > p
     brain_mask = (1 * mask).astype(np.uint8)
     brain_mask = nib.Nifti1Image(brain_mask, affine)
-    nib.save(brain_mask, os.path.join(output_dir, "brain_mask.nii"))
+    nib.save(brain_mask, os.path.join(output_dir, "brain_mask.nii.gz"))
 
     brain = img[:]
     brain[~mask] = 0
     brain = nib.Nifti1Image(brain, affine)
-    nib.save(brain, os.path.join(output_dir, "brain.nii"))
+    nib.save(brain, os.path.join(output_dir, "brain.nii.gz"))
 
 
 if __name__ == "__main__":

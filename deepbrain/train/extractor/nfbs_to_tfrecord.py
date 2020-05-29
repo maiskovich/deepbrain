@@ -62,8 +62,8 @@ def parse_example(img_path, mask_path):
 def process_dataset(prob=0.9):
     _dir = NFBS_DATASET_DIR
 
-    train_writer = tf.python_io.TFRecordWriter(os.path.join(OUTPUT, "nfbs_train.tfrecord"))
-    val_writer = tf.python_io.TFRecordWriter(os.path.join(OUTPUT, "nfbs_val.tfrecord"))
+    train_writer = tf.io.TFRecordWriter(os.path.join(OUTPUT, "nfbs_train.tfrecord"))
+    val_writer = tf.io.TFRecordWriter(os.path.join(OUTPUT, "nfbs_val.tfrecord"))
 
     regex = re.compile("[\w_]*.nii.gz")
     index = 0

@@ -78,8 +78,8 @@ def process_dataset(prob=0.9):
 
     originals = list(Path(os.path.join(_dir, "ADNI")).glob("**/*.nii"))
 
-    train_writer = tf.python_io.TFRecordWriter(ADNI_TRAIN)
-    val_writer = tf.python_io.TFRecordWriter(ADNI_VAL)
+    train_writer = tf.io.TFRecordWriter(ADNI_TRAIN)
+    val_writer = tf.io.TFRecordWriter(ADNI_VAL)
 
     index = 0
     for each in os.listdir(labels_masks):

@@ -63,8 +63,8 @@ def process_dataset(p=0.9):
     img_dir = os.path.join(DATASET_DIR, "Original")
     mask_dir = os.path.join(DATASET_DIR, "STAPLE")
 
-    train_writer = tf.python_io.TFRecordWriter(os.path.join(OUTPUT, "train.tfrecord"))
-    val_writer = tf.python_io.TFRecordWriter(os.path.join(OUTPUT, "val.tfrecord"))
+    train_writer = tf.io.TFRecordWriter(os.path.join(OUTPUT, "train.tfrecord"))
+    val_writer = tf.io.TFRecordWriter(os.path.join(OUTPUT, "val.tfrecord"))
 
     regex = re.compile("[\w_]*.nii.gz")
     index = 0

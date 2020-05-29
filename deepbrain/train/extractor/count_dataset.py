@@ -20,8 +20,8 @@ def load_iterators(train_dataset, val_dataset):
 
     val_dataset = val_dataset.batch(batch_size)
 
-    handle = tf.placeholder(tf.string, shape=[])
-    iterator = tf.data.Iterator.from_string_handle(handle, train_dataset.output_types, train_dataset.output_shapes)
+    handle = tf.compat.v1.placeholder(tf.string, shape=[])
+    iterator = tf.compat.v1.data.Iterator.from_string_handle(handle, train_dataset.output_types, train_dataset.output_shapes)
 
     next_element = iterator.get_next()
 
@@ -32,15 +32,15 @@ def load_iterators(train_dataset, val_dataset):
 
 
 def run():
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
 
     train_dataset, val_dataset = load_all_datasets()
 
     handle, training_iterator, validation_iterator, next_element = load_iterators(train_dataset, val_dataset)
 
-    sess = tf.Session()
+    sess = tf.compat.v1.Session()
 
-    sess.run(tf.global_variables_initializer())
+    sess.run(tf.compat.v1.global_variables_initializer())
 
     training_handle = sess.run(training_iterator.string_handle())
     validation_handle = sess.run(validation_iterator.string_handle())

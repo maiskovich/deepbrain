@@ -2,17 +2,17 @@ import tensorflow as tf
 from const import *
 
 def decode(serialized_example):
-    features = tf.parse_single_example(serialized_example,
+    features = tf.io.parse_single_example(serialized=serialized_example,
                                        features={
-                                           'dims': tf.FixedLenFeature([3], tf.int64),
-                                           'img': tf.FixedLenFeature([], tf.string),
-                                           'labels': tf.FixedLenFeature([], tf.string),
+                                           'dims': tf.io.FixedLenFeature([3], tf.int64),
+                                           'img': tf.io.FixedLenFeature([], tf.string),
+                                           'labels': tf.io.FixedLenFeature([], tf.string),
                                        })
 
     dims = features['dims']
 
-    img = tf.decode_raw(features['img'], tf.uint8)
-    labels = tf.decode_raw(features['labels'], tf.uint8)
+    img = tf.io.decode_raw(features['img'], tf.uint8)
+    labels = tf.io.decode_raw(features['labels'], tf.uint8)
 
     aux = tf.constant([SIZE, SIZE, SIZE])
     img = tf.reshape(img, shape=aux)
@@ -109,8 +109,8 @@ def flip_img(axis, img, labels, dims):
 
 
 def transpose_img(perm, img, labels, dims):
-    transposed_img = tf.transpose(img, perm=perm)
-    transposed_labels = tf.transpose(labels, perm=perm)
+    transposed_img = tf.transpose(a=img, perm=perm)
+    transposed_labels = tf.transpose(a=labels, perm=perm)
 
     # Shape is SIZE ^3, so no need for dims change
     # dims = [dims[perm[0]], dims[perm[1]], dims[perm[2]]]

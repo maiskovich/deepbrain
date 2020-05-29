@@ -2,17 +2,17 @@ import tensorflow as tf
 from const import *
 
 def decode(serialized_example):
-    features = tf.parse_single_example(serialized_example,
+    features = tf.io.parse_single_example(serialized=serialized_example,
                                        features={
-                                           'dims': tf.FixedLenFeature([3], tf.int64),
-                                           'img': tf.FixedLenFeature([], tf.string),
-                                           'mask': tf.FixedLenFeature([], tf.string),
+                                           'dims': tf.io.FixedLenFeature([3], tf.int64),
+                                           'img': tf.io.FixedLenFeature([], tf.string),
+                                           'mask': tf.io.FixedLenFeature([], tf.string),
                                        })
 
     dims = features['dims']
 
-    img = tf.decode_raw(features['img'], tf.uint8)
-    mask = tf.decode_raw(features['mask'], tf.uint8)
+    img = tf.io.decode_raw(features['img'], tf.uint8)
+    mask = tf.io.decode_raw(features['mask'], tf.uint8)
 
     aux = tf.constant([SIZE, SIZE, SIZE])
     img = tf.reshape(img, shape=aux)
@@ -51,8 +51,8 @@ def flip_img(axis, img, mask, dims):
 
 
 def transpose_img(perm, img, mask, dims):
-    transposed_img = tf.transpose(img, perm=perm)
-    transposed_mask = tf.transpose(mask, perm=perm)
+    transposed_img = tf.transpose(a=img, perm=perm)
+    transposed_mask = tf.transpose(a=mask, perm=perm)
 
     # Shape is SIZE ^3, so no need for dims change
     # dims = [dims[perm[0]], dims[perm[1]], dims[perm[2]]]
