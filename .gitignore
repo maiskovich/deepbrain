@@ -1,7 +1,6 @@
 brain.nii
 *.tfrecord
 
-models/
 logs/
 backup_models/
 
@@ -84,7 +83,6 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
