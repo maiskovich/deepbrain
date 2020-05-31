@@ -2,5 +2,5 @@ include README.md
 include requirements.txt
 recursive-include deepbrain *
 recursive-include deepbrain/models *
-recursive-include deepbrain/extractor *
-recursive-include deepbrain/v2 *
+recursive-include deepbrain/models/extractor *
+recursive-include deepbrain/models/v2 *
