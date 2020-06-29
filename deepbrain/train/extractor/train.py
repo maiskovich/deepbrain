@@ -1,4 +1,6 @@
 import tensorflow as tf
+if tf.__version__ > "2.0.0":
+    import tensorflow.compat.v1 as tf
 import subprocess
 import sys
 import numpy as np
@@ -18,7 +20,7 @@ def model(img, mask, dims):
     dims = tf.compat.v1.placeholder_with_default(dims, shape=[None, 3], name="dim")
 
     out = tf.cast(input_, dtype=tf.float32)
-    
+
     out = tf.compat.v1.layers.conv3d(out, filters=8, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
     out = tf.compat.v1.layers.conv3d(out, filters=8, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
 
@@ -91,13 +93,13 @@ def model(img, mask, dims):
     loss = tf.reduce_mean(input_tensor=loss)
 
     tf.compat.v1.summary.scalar("loss", loss)
-    
+
     update_ops = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.UPDATE_OPS)
     with tf.control_dependencies(update_ops):
         upd = tf.compat.v1.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
-        
+
     merged = tf.compat.v1.summary.merge_all()
-    
+
     return training, img, mask, out, merged, upd
 
 
@@ -173,4 +175,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-

@@ -1,4 +1,6 @@
 import tensorflow as tf
+if tf.__version__ > "2.0.0":
+    import tensorflow.compat.v1 as tf
 import subprocess
 import sys
 import numpy as np
@@ -18,7 +20,7 @@ def model(img, labels, dims):
     dims = tf.compat.v1.placeholder_with_default(dims, shape=[None, 3], name="dim")
 
     out = tf.cast(input_, dtype=tf.float32)
-    
+
     out = tf.compat.v1.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
     out = tf.compat.v1.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
     out = tf.compat.v1.layers.batch_normalization(out, training=training)
@@ -83,7 +85,7 @@ def model(img, labels, dims):
 
     freq = tf.constant(FREQ_PROP, dtype=tf.float32)
     weights = 1 / freq
-    
+
     loss = tf.boolean_mask(tensor=loss, mask=brain_mask)
     labels2 = tf.boolean_mask(tensor=tf.squeeze(labels), mask=brain_mask)
 
@@ -97,17 +99,17 @@ def model(img, labels, dims):
     correct_pred = tf.equal(pred, labels2)
 
     accuracy = tf.reduce_mean(input_tensor=tf.cast(correct_pred, tf.float32))
-    
+
     for k, v in LABEL_MAP.items():
         correct = tf.equal(pred, tf.constant(v, dtype=np.uint8))
         gt = tf.equal(labels2, tf.constant(v, dtype=np.uint8))
         intersection = tf.reduce_sum(input_tensor=tf.cast(tf.logical_and(correct, gt), dtype=tf.float32))
         union = tf.reduce_sum(input_tensor=tf.cast(tf.logical_or(correct, gt), dtype=tf.float32))
         tf.compat.v1.summary.scalar("iou_{}".format(k), intersection / union)
-    
+
     tf.compat.v1.summary.scalar("acc", accuracy)
     tf.compat.v1.summary.scalar("loss", loss)
-    
+
     global_step = tf.Variable(0, trainable=False)
     starter_learning_rate = 0.001
     learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, 10000, 0.96, staircase=True)
@@ -116,9 +118,9 @@ def model(img, labels, dims):
 
     with tf.control_dependencies(update_ops):
         upd = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss, global_step=global_step)
-        
+
     merged = tf.compat.v1.summary.merge_all()
-    
+
     return training, img, labels, out, merged, upd
 
 
@@ -201,4 +203,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-

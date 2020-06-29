@@ -1,4 +1,6 @@
 import tensorflow as tf
+if tf.__version__ > "2.0.0":
+    import tensorflow.compat.v1 as tf
 import subprocess
 import sys
 import numpy as np
@@ -67,4 +69,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-

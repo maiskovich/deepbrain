@@ -1,5 +1,7 @@
 # Count class frequency to deal with unbalance
 import tensorflow as tf
+if tf.__version__ > "2.0.0":
+    import tensorflow.compat.v1 as tf
 import os
 import nibabel as nib
 import numpy as np
@@ -32,7 +34,7 @@ def run():
 
     labels = Path(os.path.join(_dir, "masks", "malpem"))
     brains = Path(os.path.join(_dir, "masks", "brain_masks"))
-    
+
     ret = {}
 
     index = 0
