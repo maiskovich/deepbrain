@@ -17,9 +17,9 @@ class Extractor:
 
     def load_pb(self):
         graph = tf.Graph()
-        self.sess = tf.compat.v1.Session(graph=graph)
-        with tf.compat.v1.gfile.FastGFile(PB_FILE, 'rb') as f:
-            graph_def = tf.compat.v1.GraphDef()
+        self.sess = tf.Session(graph=graph)
+        with tf.gfile.FastGFile(PB_FILE, 'rb') as f:
+            graph_def = tf.GraphDef()
             graph_def.ParseFromString(f.read())
             with self.sess.graph.as_default():
                 tf.import_graph_def(graph_def)
@@ -31,12 +31,12 @@ class Extractor:
         self.pred = graph.get_tensor_by_name("import/pred:0")
 
     def load_ckpt(self):
-        self.sess = tf.compat.v1.Session()
+        self.sess = tf.Session()
         ckpt_path = tf.train.latest_checkpoint(CHECKPOINT_DIR)
-        saver = tf.compat.v1.train.import_meta_graph('{}.meta'.format(ckpt_path))
+        saver = tf.train.import_meta_graph('{}.meta'.format(ckpt_path))
         saver.restore(self.sess, ckpt_path)
 
-        g = tf.compat.v1.get_default_graph()
+        g = tf.get_default_graph()
 
         self.img = g.get_tensor_by_name("img:0")
         self.training = g.get_tensor_by_name("training:0")

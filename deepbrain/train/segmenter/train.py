@@ -14,36 +14,36 @@ def model(img, labels, dims):
 
     init = tf.contrib.layers.xavier_initializer()
 
-    training = tf.compat.v1.placeholder_with_default(True, shape=[], name="training")
+    training = tf.placeholder_with_default(True, shape=[], name="training")
 
-    input_ = tf.compat.v1.placeholder_with_default(img, shape=[None, SIZE, SIZE, SIZE, 1], name="img")
-    dims = tf.compat.v1.placeholder_with_default(dims, shape=[None, 3], name="dim")
+    input_ = tf.placeholder_with_default(img, shape=[None, SIZE, SIZE, SIZE, 1], name="img")
+    dims = tf.placeholder_with_default(dims, shape=[None, 3], name="dim")
 
     out = tf.cast(input_, dtype=tf.float32)
 
-    out = tf.compat.v1.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.batch_normalization(out, training=training)
+    out = tf.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.batch_normalization(out, training=training)
 
     conv1 = out
 
-    out = tf.compat.v1.layers.max_pooling3d(out, pool_size=2, strides=2)
+    out = tf.layers.max_pooling3d(out, pool_size=2, strides=2)
 
-    out = tf.compat.v1.layers.dropout(out, rate=0.4, training=training)
+    out = tf.layers.dropout(out, rate=0.4, training=training)
 
-    out = tf.compat.v1.layers.conv3d(out, filters=16, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.conv3d(out, filters=16, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.batch_normalization(out, training=training)
+    out = tf.layers.conv3d(out, filters=16, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.conv3d(out, filters=16, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.batch_normalization(out, training=training)
 
     conv2 = out
 
-    out = tf.compat.v1.layers.max_pooling3d(out, pool_size=2, strides=2)
+    out = tf.layers.max_pooling3d(out, pool_size=2, strides=2)
 
-    out = tf.compat.v1.layers.dropout(out, rate=0.4, training=training)
+    out = tf.layers.dropout(out, rate=0.4, training=training)
 
-    out = tf.compat.v1.layers.conv3d(out, filters=32, kernel_size=7, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.conv3d(out, filters=32, kernel_size=7, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.batch_normalization(out, training=training)
+    out = tf.layers.conv3d(out, filters=32, kernel_size=7, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.conv3d(out, filters=32, kernel_size=7, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.batch_normalization(out, training=training)
 
     # conv3 = out
 
@@ -58,21 +58,21 @@ def model(img, labels, dims):
 
     # out = tf.layers.dropout(out, rate=0.3, training=training)
 
-    out = tf.compat.v1.layers.conv3d_transpose(out, filters=16, kernel_size=5, strides=2, kernel_initializer=init, padding="same", use_bias=False)
+    out = tf.layers.conv3d_transpose(out, filters=16, kernel_size=5, strides=2, kernel_initializer=init, padding="same", use_bias=False)
     out = tf.concat((out, conv2), axis=-1)
-    out = tf.compat.v1.layers.conv3d(out, filters=16, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.batch_normalization(out, training=training)
+    out = tf.layers.conv3d(out, filters=16, kernel_size=5, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.batch_normalization(out, training=training)
 
-    out = tf.compat.v1.layers.dropout(out, rate=0.4, training=training)
+    out = tf.layers.dropout(out, rate=0.4, training=training)
 
-    out = tf.compat.v1.layers.conv3d_transpose(out, filters=8, kernel_size=3, strides=2, kernel_initializer=init, padding="same", use_bias=False)
+    out = tf.layers.conv3d_transpose(out, filters=8, kernel_size=3, strides=2, kernel_initializer=init, padding="same", use_bias=False)
     out = tf.concat((out, conv1), axis=-1)
-    out = tf.compat.v1.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
-    out = tf.compat.v1.layers.batch_normalization(out, training=training)
+    out = tf.layers.conv3d(out, filters=8, kernel_size=3, activation=tf.nn.relu, kernel_initializer=init, padding="same")
+    out = tf.layers.batch_normalization(out, training=training)
 
-    out = tf.compat.v1.layers.dropout(out, rate=0.4, training=training)
+    out = tf.layers.dropout(out, rate=0.4, training=training)
 
-    out = tf.compat.v1.layers.conv3d(out, filters=FILTERED_LABELS, kernel_size=1, kernel_initializer=init, padding="same")
+    out = tf.layers.conv3d(out, filters=FILTERED_LABELS, kernel_size=1, kernel_initializer=init, padding="same")
 
     softmax_out = tf.nn.softmax(out, name="softmax")
 
@@ -105,21 +105,21 @@ def model(img, labels, dims):
         gt = tf.equal(labels2, tf.constant(v, dtype=np.uint8))
         intersection = tf.reduce_sum(input_tensor=tf.cast(tf.logical_and(correct, gt), dtype=tf.float32))
         union = tf.reduce_sum(input_tensor=tf.cast(tf.logical_or(correct, gt), dtype=tf.float32))
-        tf.compat.v1.summary.scalar("iou_{}".format(k), intersection / union)
+        tf.summary.scalar("iou_{}".format(k), intersection / union)
 
-    tf.compat.v1.summary.scalar("acc", accuracy)
-    tf.compat.v1.summary.scalar("loss", loss)
+    tf.summary.scalar("acc", accuracy)
+    tf.summary.scalar("loss", loss)
 
     global_step = tf.Variable(0, trainable=False)
     starter_learning_rate = 0.001
     learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, 10000, 0.96, staircase=True)
 
-    update_ops = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.UPDATE_OPS)
+    update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
 
     with tf.control_dependencies(update_ops):
-        upd = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss, global_step=global_step)
+        upd = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss, global_step=global_step)
 
-    merged = tf.compat.v1.summary.merge_all()
+    merged = tf.summary.merge_all()
 
     return training, img, labels, out, merged, upd
 
@@ -139,8 +139,8 @@ def load_iterators(train_dataset, val_dataset):
     val_dataset = val_dataset.batch(batch_size)
     val_dataset = val_dataset.prefetch(buffer_size=batch_size)
 
-    handle = tf.compat.v1.placeholder(tf.string, shape=[])
-    iterator = tf.compat.v1.data.Iterator.from_string_handle(handle, train_dataset.output_types, train_dataset.output_shapes)
+    handle = tf.placeholder(tf.string, shape=[])
+    iterator = tf.data.Iterator.from_string_handle(handle, train_dataset.output_types, train_dataset.output_shapes)
 
     next_element = iterator.get_next()
 
@@ -151,7 +151,7 @@ def load_iterators(train_dataset, val_dataset):
 
 
 def run():
-    tf.compat.v1.reset_default_graph()
+    tf.reset_default_graph()
 
     train_dataset, val_dataset = load_all_datasets()
 
@@ -159,14 +159,14 @@ def run():
 
     training, img, labels, out, merged, upd = model(*next_element)
 
-    saver = tf.compat.v1.train.Saver(max_to_keep=2)
+    saver = tf.train.Saver(max_to_keep=2)
 
-    sess = tf.compat.v1.Session()
+    sess = tf.Session()
 
     train_writer = tf.summary.FileWriter('./logs/train', sess.graph)
     val_writer = tf.summary.FileWriter('./logs/val', sess.graph)
 
-    sess.run(tf.compat.v1.global_variables_initializer())
+    sess.run(tf.global_variables_initializer())
 
     training_handle = sess.run(training_iterator.string_handle())
     validation_handle = sess.run(validation_iterator.string_handle())
