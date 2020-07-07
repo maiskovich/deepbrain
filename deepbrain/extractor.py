@@ -16,6 +16,9 @@ class Extractor:
         self.load_pb()
 
     def load_pb(self):
+	import tensorflow as tf
+        if tf.__version__ > "2.0.0":
+            import tensorflow.compat.v1 as tf
         graph = tf.Graph()
         self.sess = tf.Session(graph=graph)
         with tf.gfile.FastGFile(PB_FILE, 'rb') as f:
@@ -31,6 +34,9 @@ class Extractor:
         self.pred = graph.get_tensor_by_name("import/pred:0")
 
     def load_ckpt(self):
+        import tensorflow as tf
+        if tf.__version__ > "2.0.0":
+            import tensorflow.compat.v1 as tf
         self.sess = tf.Session()
         ckpt_path = tf.train.latest_checkpoint(CHECKPOINT_DIR)
         saver = tf.train.import_meta_graph('{}.meta'.format(ckpt_path))
